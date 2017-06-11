@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package com_ivanp7_cscp;
+
+import "control_object_component.proto";
+
+enum Direction {
+	INITIAL_FROM_OBJECT_TO_CONTROL_SYSTEM = 0;
+	FROM_OBJECT_TO_CONTROL_SYSTEM = 1;
+	FROM_CONTROL_SYSTEM_TO_OBJECT = 2;
+}
+
+message ControlSystemMessage {
+	// metadata
+	string description = 1;
+	uint32 communication_channel_id = 2;
+	Direction direction = 3;
+	uint64 age = 4;
+
+	// data
+	repeated ControlObjectComponent components = 5;
+}

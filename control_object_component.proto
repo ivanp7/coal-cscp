@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package com_ivanp7_cscp;
+
+import "simulink_mechanics.proto";
+
+message RawVector {
+	message Element {
+		oneof element_type {
+			double double_value = 1;
+		}
+	}
+	repeated Element elements = 1;
+}
+
+message ControlObjectComponent {
+	string description = 1;
+	
+	string prefix_name = 2;
+	string name = 3;
+	
+	oneof representation {
+		RawVector raw_vector = 100;
+		
+		simulink_mechanics.Mechanism simulink_mechanics_mechanism = 101;
+	}
+}

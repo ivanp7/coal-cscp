@@ -1,0 +1,1 @@
+# Protocol Buffers .proto files for Control Object Abstraction Layer (COAL) project

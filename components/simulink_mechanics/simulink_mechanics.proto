@@ -1,0 +1,120 @@
+syntax = "proto3";
+
+package com_ivanp7_cscp.simulink_mechanics;
+
+message Vector3 {
+	double e1 = 1;
+	double e2 = 2;
+	double e3 = 3;
+}
+
+message Matrix3x3 {
+	Vector3 row1 = 1;
+	Vector3 row2 = 2;
+	Vector3 row3 = 3;
+}
+
+/// ### body ### // world CS
+
+message Body {
+	message State {
+		Vector3 position = 1;
+		Vector3 velocity = 2;
+		Vector3 angular_velocity = 3;
+		Matrix3x3 rotation_matrix = 4;
+		Vector3 acceleration = 5;
+		Vector3 angular_acceleration = 6;
+	}
+	
+	message Reaction {
+		Vector3 torque = 1;
+		Vector3 force = 2;
+	}
+	
+	oneof message_content {
+		State state = 1;
+		Reaction reaction = 2;
+	}
+}
+
+/// ### weld joint ### // local CS
+
+message WeldJoint {
+	message State {
+		Vector3 reaction_torque = 1;
+		Vector3 reaction_force = 2;
+	}
+	
+	message Reaction {
+	}
+	
+	oneof message_content {
+		State state = 1;
+		Reaction reaction = 2;
+	}
+}
+
+/// ### prismatic joint ### // local CS
+
+message PrismaticJoint {
+	message State {
+		double position = 1;
+		double velocity = 2;
+		double acceleration = 3;
+		
+		double computed_force = 4;
+		
+		Vector3 reaction_torque = 5;
+		Vector3 reaction_force = 6;
+	}
+	
+	message Reaction {
+		double output = 1;
+	}
+	
+	oneof message_content {
+		State state = 1;
+		Reaction reaction = 2;
+	}
+}
+
+/// ### revolute joint ### // local CS
+
+message RevoluteJoint {
+	message State {
+		double angle = 1;
+		double angular_velocity = 2;
+		double angular_acceleration = 3;
+		
+		double computed_torque = 4;
+		
+		Vector3 reaction_torque = 5;
+		Vector3 reaction_force = 6;
+	}
+	
+	message Reaction {
+		double output = 1;
+	}
+	
+	oneof message_content {
+		State state = 1;
+		Reaction reaction = 2;
+	}
+}
+
+//////////////////////////////////////////////////////
+
+message MechanismPart {
+	string name = 1;
+	
+	oneof mechanism_part {
+		Body body = 2;
+		WeldJoint weld_joint = 3;
+		PrismaticJoint prismatic_joint = 4;
+		RevoluteJoint revolute_joint = 5;
+	}
+}
+
+message Mechanism {
+	repeated MechanismPart parts = 1;
+}
